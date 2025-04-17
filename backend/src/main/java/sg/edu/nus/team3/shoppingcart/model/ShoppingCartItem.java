@@ -1,5 +1,7 @@
 package sg.edu.nus.team3.shoppingcart.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,6 +17,7 @@ public class ShoppingCartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne
+    @JsonIgnore
     private ShoppingCart shoppingCart;
     @ManyToOne
     @JoinColumn(name = "product_id")

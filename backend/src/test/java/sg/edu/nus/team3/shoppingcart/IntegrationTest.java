@@ -23,7 +23,7 @@ import sg.edu.nus.team3.shoppingcart.repository.ShoppingCartRepository;
 import sg.edu.nus.team3.shoppingcart.repository.UserRepository;
 
 @SpringBootTest
-public class IntegrityTest {
+public class IntegrationTest {
     @Autowired
     OrderItemRepository orderItemRepo;
     @Autowired
@@ -113,8 +113,8 @@ public class IntegrityTest {
         int prevCartCount = cartRepo.findAll().size();
         int prevUserCount = userRepo.findAll().size();
 
-        User testUser = new User("alice.johnson@email.com", "91112233", "123 Oak Street, Anytown", "Alice", "Johnson",
-                "hashed_pw_aj");
+        User testUser = new User("alice.johnson@email.com", "hashed_pw_aj", "Alice", "Johnson", "91112233",
+                "123 Oak Street, Anytown");
         // Order testOrder = new Order(testUser, LocalDateTime.of(2023, 10, 15, 14, 30,
         // 0), LocalDate.of(2023, 10, 15),
         // "Completed", "Credit Card", new ArrayList<OrderItem>());

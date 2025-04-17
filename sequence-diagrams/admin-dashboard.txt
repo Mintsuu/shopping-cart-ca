@@ -1,0 +1,49 @@
+@startuml
+
+actor "Staff" as staff
+boundary "DashboardView" as dashboardView
+control "AdminController" as adminController
+
+participant "OrderServiceImplementation" as orderService
+participant "OrderRepository" as orderRepo
+
+participant "ProductServiceImplementation" as productService
+participant "ProductRepository" as productRepo
+
+'Show orders in week summary 
+staff -> dashboardView : redirect() // after logging in
+dashboardView -> adminController : getWeeklyOrders() 
+adminController -> orderService : getWeeklyOrders()
+orderService -> orderRepo : getOrdersByWeek(before: DateTime, after: DateTime)
+orderRepo -> orderService : return List<Order>
+orderService -> adminController : return List<Order>
+adminController -> dashboardView : showWeeklyOrderSummary()
+
+
+'Show all products 
+dashboardView -> adminController : getAllProducts()
+adminController -> productService : getAllProducts()
+productService -> productRepo : findAllProducts()
+productRepo -> productService : return List<Product>
+productService -> adminController : return List<Product>
+adminController -> dashboardView : showProductList()
+
+'Create new product
+staff -> dashboardView : createProduct(Product product)
+dashboardView -> adminController : createProduct(Product product)
+adminController -> productService : createProduct(Product product)
+productService -> productRepo : createProduct(Product product)
+
+'Modify product
+staff -> dashboardView : updateProduct()
+dashboardView -> adminController : updateProduct(int product_id, Product product)
+adminController -> productService : updateProduct(int product_id, Product product)
+productService -> productRepo : updateProductById(int product_id, Product product)
+
+'Delete product
+staff -> dashboardView : deleteProduct()
+dashboardView -> adminController : deleteProduct(int product_id)
+adminController -> productService : deleteProduct(int product_id)
+productService -> productRepo : deleteProductById(int product_id)
+
+@enduml

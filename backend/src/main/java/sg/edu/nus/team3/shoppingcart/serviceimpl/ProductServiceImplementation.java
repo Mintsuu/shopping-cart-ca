@@ -1,6 +1,5 @@
 package sg.edu.nus.team3.shoppingcart.serviceimpl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,38 +18,62 @@ public class ProductServiceImplementation implements ProductService {
   @Autowired
   public ProductRepository productRepo;
 
+  @Override
   public List<Product> searchProductById(int product_id) {
-    // TODO: Finish implementation of searchProductById
-    return new ArrayList<Product>();
+    List<Product> productInfo = productRepo.findById(product_id).stream().toList();
+    return productInfo;
   }
 
-  public double getProductPriceById(int product_id) {
-    // TODO: Finish implementation of getProductPriceById
-    return 0.0;
+  // @author of this method : Thina
+  // this method is used to find the product by productId for the add to cart case
+  @Override
+  public Product findProductById(int productId) {
+    return productRepo.findProductById(productId).orElseThrow();
   }
 
-  @Transactional
+  @Override
   public List<Product> getAllProducts() {
-    // TODO: Finish implementation of getAllProducts()
-    List<Product> productList = productRepo.retrieveProductListFromProduct();
+    List<Product> productList = productRepo.retrieveProductListFromProduct().get();
     return productList;
   }
 
+  @Override
   public void createProduct(Product product) {
-    // TODO: Finish implementation of createProduct()
+    productRepo.save(product);
   }
 
+  @Override
   public void editProductById(int product_id, Product product) {
-    // TODO: Finish implementation of editProductById()
-
+    productRepo.updateProductById(product_id, product.getName(), product.getStock(), product.getUnitPrice(),
+        product.getCategory());
   }
-
+  
+  @Override
   public void deleteProductById(int product_id) {
-    // TODO: Finish implementation of deleteProductById()
+    productRepo.deleteProductById(product_id);
   }
-
+  
+  @Override
   public List<Product> searchProductByName(String product_name) {
-    // TODO: Finish implementation of searchProductByName
-    return new ArrayList<Product>();
+    List<Product> productInfo = productRepo.findByProductName(product_name).stream().toList();
+    return productInfo;
+  }
+  
+  // @author Shengyi
+  @Override
+  public List<Product> getProductsByPriceRange(double min,double max) {
+	    if (min < 0 || max > 0) {
+	      throw new IllegalArgumentException("The price can't be less than zero!");
+	    }
+	    if (min > max) {
+	      throw new IllegalArgumentException("The price can't be greater than zero!");
+	    }
+	    return productRepo.findByPriceBetween(min, max);
+	  }
+  
+  // @author Dion Yao
+  @Override
+  public List<Product> searchProducts(String input) {
+	  return productRepo.findByNameIgnoreCase(input);
   }
 }
